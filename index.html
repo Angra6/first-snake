@@ -45,7 +45,7 @@
 
             snake.forEach((part, index) => {
     if (index === 0) {
-        // 🧠 KOPF als Bild
+       
         ctx.drawImage(
             headImg,
             part.x * cellWidth,
@@ -54,7 +54,7 @@
             cellHeight
         );
     } else {
-        // 🐍 KÖRPER als Block
+        
         ctx.fillStyle = "white";
         add(part.x, part.y);
     }
@@ -69,7 +69,7 @@
 
         function testGameOver(){
             if (snake[0].x < 0 ||
-                snake[0].y > cols -1 ||
+                snake[0].x > cols -1 ||
                 snake[0].y < 0 ||
                 snake[0].y > rows -1
             ) {

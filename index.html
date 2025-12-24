@@ -20,10 +20,12 @@
             
         ]
         let food = {x: 5, y: 5};
+        let gameOverFrames = 0;
 
-
+        let gameOver = false;
         let cellWidth = canvas.width / cols;
         let cellHeight = canvas.height / rows;
+        let punkte = 0;
         let direction = 'LEFT'
         let foodCollected = false;
         const headImg = new Image();
@@ -31,7 +33,7 @@
         
         placeFood();
 
-        setInterval(gameLoop, 150);
+        setInterval(gameLoop, 130);
         document.addEventListener('keydown', keyDown);
 
 
@@ -39,6 +41,10 @@
         
 
         function draw() {
+
+
+            
+            
             ctx.fillStyle = 'black'; //Farbe sonst Canvas durchsichtig
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'white';
@@ -59,28 +65,62 @@
         add(part.x, part.y);
     }
 });
-          
+           
 
             ctx.fillStyle = 'lightgreen';
            add(food.x, food.y); //food
 
+            ctx.font = '30px Arial';
+            ctx.fillText (punkte, 450, 450);
+            if (gameOverFrames > 0) {
+                ctx.fillStyle = 'red';
+                ctx.font = '70px Arial';
+                ctx.fillText ('GAME OVER', 30, 60);
+                gameOverFrames--;
+            }
            requestAnimationFrame(draw);
         }
 
-        function testGameOver(){
-            if (snake[0].x < 0 ||
-                snake[0].x > cols -1 ||
-                snake[0].y < 0 ||
-                snake[0].y > rows -1
-            ) {
-                placeFood();
-                snake = [
-            {x: 19, y: 3} ];
-            direction = 'LEFT';
+        function testGameOver() {
             
+
+         
+      if (
+          snake[0].x < 0 ||
+          snake[0].x > cols - 1 ||
+          snake[0].y < 0 ||
+          snake[0].y > rows - 1
+          
+    ) {
+        gameOverFrames = 30;
+        resetGame();
         
-            }
+        
+
+    }
+
+    
+        for (let i = snake.length - 1; i > 0; i--) {
+        if (
+            snake[0].x === snake[i].x &&
+            snake[0].y === snake[i].y
+        ) {
+            gameOverFrames = 30;
+            resetGame();
+            
         }
+    }
+}
+function resetGame() {
+   
+    snake = [{ x: 19, y: 3 }];
+    direction = 'LEFT';
+    punkte = 0;
+    placeFood();
+    return false;
+    gameOver = false;
+    
+}
 
         function placeFood(){
             let randomX = Math.floor(Math.random() * cols);
@@ -112,6 +152,8 @@
             if(foodCollected) {
                 snake = [{x: snake[0].x, y: snake[0].y}, ...snake];
                 foodCollected = false;
+                punkte++;
+                
                 
             }
             shiftSnake();
@@ -136,22 +178,23 @@
                 snake[0].y == food.y) {
                     foodCollected = true;
                     placeFood();
+                    
                 }
             
             
         }
 
         function keyDown(e) {
-            if (e.keyCode == 37) {
+            if (e.keyCode == 65) {
                 direction = 'LEFT';
             } 
-            if (e.keyCode == 38) {
+            if (e.keyCode == 87) {
                 direction = 'UP';
             }
-             if (e.keyCode == 39) {
+             if (e.keyCode == 68) {
                 direction = 'RIGHT';
             }
-             if (e.keyCode == 40) {
+             if (e.keyCode == 83) {
                 direction = 'DOWN';
             }
         }
